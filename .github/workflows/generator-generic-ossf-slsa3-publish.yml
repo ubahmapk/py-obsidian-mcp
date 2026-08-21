@@ -13,8 +13,15 @@
 name: SLSA generic generator
 on:
   workflow_dispatch:
-  release:
-    types: [created]
+  # The `release: types: [created]` trigger is intentionally disabled for now.
+  # This workflow still has the unmodified starter-template build step below
+  # (dummy "artifact1"/"artifact2" files) -- if it fired on a real release, it
+  # would attach meaningless SLSA provenance to real release assets. Re-enable
+  # this trigger only once the build step is replaced with the real `uv build`
+  # output from PyPI publishing (see issue #3 and the follow-up wiring issue
+  # tracking this workflow specifically).
+  # release:
+  #   types: [created]
 
 jobs:
   build:
