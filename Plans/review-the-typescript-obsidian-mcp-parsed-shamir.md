@@ -163,3 +163,21 @@ All models use `model_config = ConfigDict(extra="forbid")` (matches/extends zod 
 2. Point the server at a real (or scratch) Obsidian vault: `uv run obsidian-mcp <vault-path>` and confirm clean startup (no `.obsidian/app.json` → expect the fatal-error stdout/stderr protocol to fire correctly).
 3. Use `mcp`'s dev inspector (`mcp dev` / `mcp-inspector` equivalent to the TS project's `bunx @modelcontextprotocol/inspector`) to call each of the 11 tools interactively: read/create/edit/delete/move a note, create a directory, search by content/filename/tag, add/remove/rename tags, list vaults — confirm responses match the documented format and that filesystem side effects (backups created/cleaned, `.trash/` entries, link rewrites) are correct.
 4. Wire into a real Claude Desktop `claude_desktop_config.json` pointing at `uv run obsidian-mcp <vault-path>` and manually exercise a few tools through an actual conversation to confirm end-to-end behavior matches the TS server's UX.
+
+---
+
+## Follow-up (2026-08-21): Windows support tracking issue
+
+Not a code-planning task — this is a single administrative action: file a GitHub issue on `ubahmapk/py-obsidian-mcp` tracking Windows support as a future feature request, no code changes.
+
+**Issue content** (based on the difficulty assessment given to the user):
+- **Title**: `Add Windows support`
+- **Body**: summarizes that the port is currently macOS/Linux-only by deliberate scoping decision (see "Platform scope" row in the Decisions table above), and that adding it is estimated as roughly a half-day to a day of focused work, concentrated entirely in `src/obsidian_mcp/utils/path_safety.py` and the CLI bootstrap validation in `src/obsidian_mcp/cli.py`:
+  - `check_path_characters`: Windows path-length limit (260 vs current 4096), reserved device names (`CON`/`PRN`/`AUX`/`NUL`/`COM1-9`/`LPT1-9`), invalid characters (`<>:"|?*`), drive-letter-root and UNC/device-path rejection.
+  - `normalize_path`: preserve UNC paths and drive letters, a Windows system-directory denylist, consistent backslash handling.
+  - Network-drive detection: needs a Windows equivalent to the current `os.path.ismount()` + mount-prefix denylist approach — likely a simple UNC/mapped-drive-letter heuristic rather than a `pywin32` dependency, to avoid a platform-conditional dependency for marginal benefit (consistent with the existing decision to avoid shelling out to `df`/`wmic`).
+  - Needs real Windows testing (GitHub Actions `windows-latest` runner, or a real machine) — the main risk is symlink/realpath containment-check behavior against NTFS junctions/reparse points, not the mechanical regex porting.
+  - Everything else (all 11 tools, tag/link/frontmatter logic, resources, MCP server wiring) needs no changes — already platform-agnostic via `os.path`/`anyio.Path`.
+- **Labels**: `enhancement` (create if it doesn't already exist on the repo).
+
+No implementation, no file edits to the source tree — just `gh issue create` against the already-existing public repo.
