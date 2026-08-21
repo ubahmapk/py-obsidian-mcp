@@ -1,0 +1,30 @@
+[project]
+name = "obsidian-mcp"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Jon Mark Allen", email = "ubahmapk@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=2.0.0",
+    "pydantic>=2.13.4",
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+obsidian-mcp = "obsidian_mcp.cli:run"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.16.4",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
