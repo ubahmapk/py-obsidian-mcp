@@ -15,7 +15,13 @@ def _make_vault(base: str, name: str) -> str:
     return vault
 
 
-def test_validate_vault_path_accepts_real_vault(tmp_path):
+def test_validate_vault_path_accepts_real_vault(tmp_path, monkeypatch):
+    # pytest's tmp_path resolves under /tmp on Linux CI runners, which the
+    # system-directory denylist rejects (correctly -- see
+    # test_check_suspicious_path_rejects_system_dir in test_path_safety.py).
+    # That check is exercised there; this test's concern is only the
+    # happy path for an otherwise well-formed vault.
+    monkeypatch.setattr(cli, "check_suspicious_path", lambda path: None)
     base = os.path.realpath(tmp_path)
     vault = _make_vault(base, "vault")
     resolved = cli._validate_vault_path(vault)
