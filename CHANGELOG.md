@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-23
+
+### Added
+
+- CI workflow (`.github/workflows/ci.yml`): `pytest -q` and `ruff check` on every push/PR to `main`.
+- Release workflow (`.github/workflows/release.yml`): on a `v*` tag push, re-runs the test/lint gate, verifies the tag matches `pyproject.toml`'s version, builds the sdist/wheel, creates a GitHub Release with the changelog section and build artifacts attached, and publishes to PyPI via Trusted Publishing.
+- `LICENSE` (MIT), PyPI metadata (`description`, `readme`, `license`, `classifiers`, `project.urls`).
+
+### Changed
+
+- Renamed the PyPI distribution to `py-obsidian-mcp` — `obsidian-mcp` was already taken by an unrelated project. The installed CLI command is still `obsidian-mcp`.
+
+### Fixed
+
+- 42 `ruff` `ASYNC230`/`SIM115` violations in `tests/` (blocking `open()` calls in async test functions), and a Linux-only test failure in `test_validate_vault_path_accepts_real_vault` caused by `tmp_path` resolving under the `/tmp` system-directory denylist on Linux CI runners.
+
 ## [0.1.0] - 2026-08-21
 
 Initial release: a Python port of [obsidian-mcp](https://github.com/StevenStavrakis/obsidian-mcp) (TypeScript), functionally equivalent with a few deliberate fixes and simplifications.
@@ -31,5 +47,6 @@ Initial release: a Python port of [obsidian-mcp](https://github.com/StevenStavra
 - **Simplified**: network-drive detection uses `os.path.ismount()` plus a known-mount-prefix denylist instead of shelling out to `df`/`wmic`/PowerShell on every startup.
 - **Consolidated**: a shared `line_classifier.py` replaces three independent copies of the same code-block/HTML-comment line-scanning logic in TS; a new `backup.py` unifies three previously-scattered backup mechanisms (per-file edit safety backup, `.trash/` soft delete, vault-wide snapshot before a bulk rename) into one module while preserving their distinct behaviors.
 
-[Unreleased]: https://github.com/ubahmapk/py-obsidian-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/ubahmapk/py-obsidian-mcp/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/ubahmapk/py-obsidian-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ubahmapk/py-obsidian-mcp/releases/tag/v0.1.0

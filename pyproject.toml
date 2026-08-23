@@ -1,6 +1,6 @@
 [project]
 name = "py-obsidian-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python MCP server giving an LLM client read/write access to local Obsidian vaults via direct filesystem access."
 readme = "README.md"
 license = "MIT"
