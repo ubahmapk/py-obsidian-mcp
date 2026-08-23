@@ -15,6 +15,15 @@ This is a Python port of [obsidian-mcp](https://github.com/StevenStavrakis/obsid
 
 ## Install & run
 
+The PyPI distribution is named `py-obsidian-mcp` (the `obsidian-mcp` name was already taken by an unrelated project) — the installed command is still `obsidian-mcp`.
+
+```bash
+uvx --from py-obsidian-mcp obsidian-mcp /path/to/your/vault [/path/to/another/vault ...]
+# or: pip install py-obsidian-mcp && obsidian-mcp /path/to/your/vault
+```
+
+### From source (development)
+
 ```bash
 uv sync
 uv run obsidian-mcp /path/to/your/vault [/path/to/another/vault ...]
@@ -25,6 +34,19 @@ Vault names are auto-derived from each directory's basename (lowercased, non-alp
 ## Claude Desktop configuration
 
 Edit `claude_desktop_config.json` (macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "obsidian": {
+      "command": "uvx",
+      "args": ["--from", "py-obsidian-mcp", "obsidian-mcp", "/path/to/your/vault"]
+    }
+  }
+}
+```
+
+Or, running from a local clone instead of the published package:
 
 ```json
 {

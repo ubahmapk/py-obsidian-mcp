@@ -1,16 +1,32 @@
 [project]
-name = "obsidian-mcp"
+name = "py-obsidian-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Python MCP server giving an LLM client read/write access to local Obsidian vaults via direct filesystem access."
+readme = "README.md"
+license = "MIT"
 authors = [
     { name = "Jon Mark Allen", email = "ubahmapk@gmail.com" }
 ]
 requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "mcp>=2.0.0",
     "pydantic>=2.13.4",
     "pyyaml>=6.0.3",
 ]
+
+[project.urls]
+Repository = "https://github.com/ubahmapk/py-obsidian-mcp"
+Issues = "https://github.com/ubahmapk/py-obsidian-mcp/issues"
 
 [project.scripts]
 obsidian-mcp = "obsidian_mcp.cli:run"
@@ -18,6 +34,9 @@ obsidian-mcp = "obsidian_mcp.cli:run"
 [build-system]
 requires = ["uv_build>=0.12.5,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "obsidian_mcp"
 
 [dependency-groups]
 dev = [
