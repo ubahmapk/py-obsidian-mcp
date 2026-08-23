@@ -14,12 +14,17 @@ name: SLSA generic generator
 on:
   workflow_dispatch:
   # Fires after release.yml creates the GitHub Release on a `v*` tag push.
-  # This job independently rebuilds the sdist/wheel with `uv build` (pinned to
-  # the same uv version as release.yml, so the rebuild is byte-for-byte
-  # identical to what was already published) and attaches SLSA3 provenance to
-  # that same release via `upload-assets: true`.
+  # release.yml attaches build assets via `gh release create ... dist/*`,
+  # which per gh's own docs creates the release as a draft, uploads the
+  # assets, then publishes it -- so this fires `published`, not `created`
+  # (drafts don't trigger `created` either; verified against a real
+  # throwaway release during #4's implementation). This job independently
+  # rebuilds the sdist/wheel with `uv build` (pinned to the same uv version
+  # as release.yml, so the rebuild is byte-for-byte identical to what was
+  # already published) and attaches SLSA3 provenance to that same release
+  # via `upload-assets: true`.
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build:
