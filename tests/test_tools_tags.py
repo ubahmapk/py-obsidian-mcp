@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 
 async def test_add_tags_frontmatter_and_content(mcp, vault_path):
@@ -9,7 +10,7 @@ async def test_add_tags_frontmatter_and_content(mcp, vault_path):
     r = await mcp.call_tool("add-tags", {"vault": "test", "files": ["note.md"], "tags": ["status/active"]})
     assert "modified" in r.content[0].text.lower()
 
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert "status/active" in content  # frontmatter array
     assert "#status/active" in content  # inline
 
@@ -21,7 +22,7 @@ async def test_remove_tags_hierarchical_removes_children(mcp, vault_path):
 
     await mcp.call_tool("remove-tags", {"vault": "test", "files": ["note.md"], "tags": ["work"]})
 
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert "work/active" not in content
     assert "tags: []" in content or "tags: [ ]" in content or "tags: [\n]" in content or "tags:" in content
 
@@ -34,7 +35,7 @@ async def test_remove_tags_preserve_children(mcp, vault_path):
         "remove-tags", {"vault": "test", "files": ["note.md"], "tags": ["work"], "options": {"preserve_children": True}}
     )
 
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert "work/active" in content
 
 
@@ -52,7 +53,7 @@ async def test_rename_tag_preserves_hierarchy(mcp, vault_path):
 
     await mcp.call_tool("rename-tag", {"vault": "test", "old_tag": "work", "new_tag": "projects", "create_backup": False})
 
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert "projects" in content
     assert "projects/active" in content
     assert "work" not in content.replace("projects", "")  # no stray "work" left post-rename

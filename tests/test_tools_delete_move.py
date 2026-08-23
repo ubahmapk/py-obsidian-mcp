@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 from mcp.shared.exceptions import MCPError
@@ -16,7 +17,7 @@ async def test_delete_note_soft_delete_default(mcp, vault_path):
     trash_dir = os.path.join(vault_path, ".trash")
     entries = os.listdir(trash_dir)
     assert len(entries) == 1
-    content = open(os.path.join(trash_dir, entries[0])).read()
+    content = Path(os.path.join(trash_dir, entries[0])).read_text()
     assert "trash_metadata" in content
     assert "cleanup" in content
 
@@ -38,7 +39,7 @@ async def test_delete_note_strikes_through_links(mcp, vault_path):
 
     await mcp.call_tool("delete-note", {"vault": "test", "path": "target.md"})
 
-    content = open(os.path.join(vault_path, "referrer.md")).read()
+    content = Path(os.path.join(vault_path, "referrer.md")).read_text()
     assert "~~[[target]]~~" in content
 
 
@@ -66,7 +67,7 @@ async def test_move_note_rewrites_links(mcp, vault_path):
     await mcp.call_tool("move-note", {"vault": "test", "source": "target.md", "destination": "renamed.md"})
 
     assert os.path.exists(os.path.join(vault_path, "renamed.md"))
-    content = open(os.path.join(vault_path, "referrer.md")).read()
+    content = Path(os.path.join(vault_path, "referrer.md")).read_text()
     assert "[[renamed]]" in content
     assert "[link](renamed.md)" in content
     assert "[[target]]" not in content

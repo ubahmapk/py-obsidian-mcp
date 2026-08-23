@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 from mcp.shared.exceptions import MCPError
@@ -40,14 +41,14 @@ async def test_edit_note_append(mcp, vault_path):
     await mcp.call_tool("create-note", {"vault": "test", "filename": "note.md", "content": "line1"})
     r = await mcp.call_tool("edit-note", {"vault": "test", "filename": "note.md", "operation": "append", "content": "line2"})
     assert "appended successfully" in r.content[0].text
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert "line1" in content and "line2" in content
 
 
 async def test_edit_note_replace(mcp, vault_path):
     await mcp.call_tool("create-note", {"vault": "test", "filename": "note.md", "content": "old"})
     await mcp.call_tool("edit-note", {"vault": "test", "filename": "note.md", "operation": "replace", "content": "new"})
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert content == "new"
 
 
@@ -84,5 +85,5 @@ async def test_edit_note_restores_on_failure(mcp, vault_path, monkeypatch):
     with pytest.raises(MCPError):
         await mcp.call_tool("edit-note", {"vault": "test", "filename": "note.md", "operation": "replace", "content": "new"})
 
-    content = open(os.path.join(vault_path, "note.md")).read()
+    content = Path(os.path.join(vault_path, "note.md")).read_text()
     assert content == "original"

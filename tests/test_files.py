@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from obsidian_mcp.utils.files import (
     ensure_directory,
@@ -14,14 +15,10 @@ async def test_get_all_markdown_files_recursive_and_skips_hidden(tmp_path):
     base = os.path.realpath(tmp_path)
     os.makedirs(os.path.join(base, "sub"))
     os.makedirs(os.path.join(base, ".hidden"))
-    with open(os.path.join(base, "a.md"), "w") as f:
-        f.write("a")
-    with open(os.path.join(base, "sub", "b.md"), "w") as f:
-        f.write("b")
-    with open(os.path.join(base, ".hidden", "c.md"), "w") as f:
-        f.write("c")
-    with open(os.path.join(base, "notmd.txt"), "w") as f:
-        f.write("x")
+    Path(os.path.join(base, "a.md")).write_text("a")
+    Path(os.path.join(base, "sub", "b.md")).write_text("b")
+    Path(os.path.join(base, ".hidden", "c.md")).write_text("c")
+    Path(os.path.join(base, "notmd.txt")).write_text("x")
 
     found = await get_all_markdown_files(base)
     relative = sorted(os.path.relpath(f, base) for f in found)
@@ -32,8 +29,7 @@ async def test_file_exists(tmp_path):
     base = os.path.realpath(tmp_path)
     path = os.path.join(base, "a.md")
     assert await file_exists(path) is False
-    with open(path, "w") as f:
-        f.write("a")
+    Path(path).write_text("a")
     assert await file_exists(path) is True
 
 
