@@ -13,53 +13,39 @@
 name: SLSA generic generator
 on:
   workflow_dispatch:
-  # The `release: types: [created]` trigger is intentionally disabled for now.
-  # This workflow still has the unmodified starter-template build step below
-  # (dummy "artifact1"/"artifact2" files) -- if it fired on a real release, it
-  # would attach meaningless SLSA provenance to real release assets. Re-enable
-  # this trigger only once the build step is replaced with the real `uv build`
-  # output from PyPI publishing (see issue #3 and the follow-up wiring issue
-  # tracking this workflow specifically).
-  # release:
-  #   types: [created]
+  # Fires after release.yml creates the GitHub Release on a `v*` tag push.
+  # This job independently rebuilds the sdist/wheel with `uv build` (pinned to
+  # the same uv version as release.yml, so the rebuild is byte-for-byte
+  # identical to what was already published) and attaches SLSA3 provenance to
+  # that same release via `upload-assets: true`.
+  release:
+    types: [created]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      digests: ${{ steps.hash.outputs.digests }}
+      hashes: ${{ steps.hash.outputs.hashes }}
 
     steps:
       - uses: actions/checkout@v7
 
-      # ========================================================
-      #
-      # Step 1: Build your artifacts.
-      #
-      # ========================================================
-      - name: Build artifacts
-        run: |
-            # These are some amazing artifacts.
-            echo "artifact1" > artifact1
-            echo "artifact2" > artifact2
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.1
+        with:
+          version: "0.12.5"
+          python-version: "3.11"
 
-      # ========================================================
-      #
-      # Step 2: Add a step to generate the provenance subjects
-      #         as shown below. Update the sha256 sum arguments
-      #         to include all binaries that you generate
-      #         provenance for.
-      #
-      # ========================================================
+      - name: Build artifacts
+        run: uv build
+
       - name: Generate subject for provenance
         id: hash
         run: |
           set -euo pipefail
 
-          # List the artifacts the provenance will refer to.
-          files=$(ls artifact*)
-          # Generate the subjects (base64 encoded).
-          echo "hashes=$(sha256sum $files | base64 -w0)" >> "${GITHUB_OUTPUT}"
+          cd dist
+          echo "hashes=$(sha256sum *.whl *.tar.gz | base64 -w0)" >> "${GITHUB_OUTPUT}"
 
   provenance:
     needs: [build]
@@ -67,7 +53,7 @@ jobs:
       actions: read   # To read the workflow path.
       id-token: write # To sign the provenance.
       contents: write # To add assets to a release.
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
     with:
-      base64-subjects: "${{ needs.build.outputs.digests }}"
+      base64-subjects: "${{ needs.build.outputs.hashes }}"
       upload-assets: true # Optional: Upload to a new release
