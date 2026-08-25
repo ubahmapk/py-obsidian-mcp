@@ -121,6 +121,9 @@ def _check_windows_path_characters(vault_path: str) -> str | None:
     if _WINDOWS_DEVICE_PATH_RE.match(vault_path):
         return "Device paths are not allowed"
 
+    if not vault_path.strip("/\\"):
+        return "Cannot use filesystem root directory"
+
     if _WINDOWS_DRIVE_ROOT_RE.match(vault_path):
         return "Cannot use a drive root directory"
 

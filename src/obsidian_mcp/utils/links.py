@@ -15,6 +15,7 @@ import re
 import anyio
 
 from obsidian_mcp.utils.files import get_all_markdown_files
+from obsidian_mcp.utils.path_safety import normalize_path
 
 
 def _wikilink_re(name: str) -> re.Pattern[str]:
@@ -59,7 +60,10 @@ async def update_vault_links(vault_path: str, old_path: str | None, new_path: st
     files = await get_all_markdown_files(vault_path)
     updated = 0
 
-    new_full_path = os.path.join(vault_path, new_path) if new_path else None
+    # Normalize the destination the same way get_all_markdown_files normalizes the
+    # walked file paths (forward slashes), so the skip comparison below matches on
+    # Windows -- os.path.join would otherwise produce backslashes and never match.
+    new_full_path = normalize_path(os.path.join(vault_path, new_path)) if new_path else None
 
     for file_path in files:
         if new_full_path and file_path == new_full_path:
