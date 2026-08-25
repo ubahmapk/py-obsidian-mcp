@@ -4,6 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/py-obsidian-mcp)](https://pypi.org/project/py-obsidian-mcp/)
 [![CI](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ubahmapk/py-obsidian-mcp/blob/main/LICENSE)
+[![MCP Server](https://img.shields.io/badge/MCP-server-black?logo=modelcontextprotocol&logoColor=white)](https://modelcontextprotocol.io)
 [![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
