@@ -13,6 +13,11 @@ wheels/
 .pytest_cache/
 .ruff_cache/
 
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
 # Editor / local tool state (not project source)
 .claude/
 .zed/
