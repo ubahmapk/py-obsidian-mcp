@@ -11,7 +11,9 @@ This is a Python port of [obsidian-mcp](https://github.com/StevenStavrakis/obsid
 - Python 3.11+
 - [`uv`](https://docs.astral.sh/uv/)
 - An Obsidian vault (a directory that has been opened by Obsidian at least once, i.e. contains a `.obsidian/app.json`)
-- macOS or Linux (Windows is not supported — see ISA "Out of Scope")
+- macOS, Linux, or Windows
+
+> **Windows note:** UNC network shares (`\\server\share`) are rejected, but *mapped* network drive letters are treated as local (detecting them would require a `wmic`/PowerShell probe this project deliberately avoids). Point the server at a vault on a local disk.
 
 ## Install & run
 

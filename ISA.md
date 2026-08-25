@@ -20,7 +20,7 @@ A developer runs `uv run obsidian-mcp <vault-path>` and it just works with Claud
 
 ## Out of Scope
 
-- Windows support (drive letters, UNC paths, reserved device names, `wmic`/PowerShell probing) — macOS/Linux only, per explicit user decision.
+- ~~Windows support~~ — **now in scope and implemented** (issue #1): drive letters, UNC paths, reserved device names, and a Windows system-directory denylist are handled in `path_safety.py` via runtime platform dispatch. Network-drive detection is a UNC heuristic only (no `wmic`/PowerShell probing, no `pywin32`) — mapped network drive *letters* are not detected, a deliberate tradeoff consistent with dropping the Unix `df` shell-out.
 - The `manage-tags` tool — confirmed dead code in TS (never registered); `add-tags`/`remove-tags` already cover it.
 - Cross-vault link rewriting (`isMovedToOtherVault`/`isMovedFromOtherVault` branches) — confirmed unreachable in TS, no tool ever exercises them.
 - `RateLimiter` and `ConnectionMonitor` subsystems — the rate limiter is a global per-RPC-method budget (not real per-client protection) and the connection monitor's own heartbeat resets the idle clock it's supposed to enforce, making it self-defeating by construction.

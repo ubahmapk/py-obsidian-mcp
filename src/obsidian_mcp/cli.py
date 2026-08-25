@@ -1,7 +1,7 @@
 """CLI entry point and vault bootstrap validation, ported from TS `main.ts`.
 
-macOS/Linux only (see project ISA "Out of Scope" -- Windows-specific validation
-branches from the TS original are intentionally not ported).
+Cross-platform (macOS, Linux, Windows). Platform-specific path rules live in
+`obsidian_mcp.utils.path_safety`; this module stays separator-agnostic.
 """
 
 from __future__ import annotations
@@ -61,7 +61,11 @@ def _validate_vault_path(raw_path: str) -> str:
     resolved absolute (realpath'd) path, or calls `_fatal()` and exits.
     """
     expanded = os.path.expanduser(raw_path)
-    normalized = os.path.normpath(expanded).rstrip("/")
+    # Strip trailing separators (both kinds, for Windows) without stripping a
+    # bare drive/UNC root -- os.path.normpath already keeps a lone root's separator.
+    normalized = os.path.normpath(expanded)
+    if len(normalized) > 3:
+        normalized = normalized.rstrip("/\\")
     absolute_path = os.path.realpath(normalized)
 
     if not os.path.isabs(absolute_path):
