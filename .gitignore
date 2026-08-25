@@ -20,4 +20,4 @@ htmlcov/
 
 # Editor / local tool state (not project source)
 .claude/
-.zed/
+.omo/
