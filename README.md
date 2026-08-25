@@ -1,5 +1,13 @@
 # obsidian-mcp (Python)
 
+[![PyPI version](https://img.shields.io/pypi/v/py-obsidian-mcp)](https://pypi.org/project/py-obsidian-mcp/)
+[![Python versions](https://img.shields.io/pypi/pyversions/py-obsidian-mcp)](https://pypi.org/project/py-obsidian-mcp/)
+[![CI](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ubahmapk/py-obsidian-mcp/blob/main/LICENSE)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 A Python MCP (Model Context Protocol) server giving an LLM client (e.g. Claude Desktop) read/write access to local Obsidian vaults, via direct filesystem access — no Obsidian Local REST API plugin, no HTTP, no auth token required.
 
 This is a Python port of [obsidian-mcp](https://github.com/StevenStavrakis/obsidian-mcp) (TypeScript), functionally equivalent with a few deliberate fixes and simplifications — see `Plans/review-the-typescript-obsidian-mcp-parsed-shamir.md` and `ISA.md` for the full rationale.
