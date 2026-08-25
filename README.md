@@ -5,6 +5,7 @@
 [![MCP Server](https://img.shields.io/badge/MCP-server-black?logo=modelcontextprotocol&logoColor=white)](https://modelcontextprotocol.io)
 [![PyPI version](https://img.shields.io/pypi/v/py-obsidian-mcp)](https://pypi.org/project/py-obsidian-mcp/)
 [![CI](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ubahmapk/py-obsidian-mcp/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/ubahmapk/py-obsidian-mcp/branch/main/graph/badge.svg)](https://codecov.io/gh/ubahmapk/py-obsidian-mcp)
 
 A Python MCP (Model Context Protocol) server giving an LLM client (e.g. Claude Desktop) read/write access to local Obsidian vaults, via direct filesystem access — no Obsidian Local REST API plugin, no HTTP, no auth token required.
 
